@@ -18,3 +18,14 @@ Route::get('/', function () {
 Route::get('escribir', function () {
     return view('form');
 })->name("create");
+
+Route::post('escribir', function () {
+    request()->validate([
+        'name' => 'required',
+        'email' => 'required|email',
+        'title' => 'required',
+        'message' => 'required|min:6'
+    ]);
+
+    return view('form', ['form_valid' => 'validated']);
+});
