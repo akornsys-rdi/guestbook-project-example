@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Message;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
@@ -13,7 +14,10 @@ class MessageController extends Controller
      */
     public function index()
     {
-        return view('main');
+        //sólo coge los tres últimos y los muestra en orden inverso
+        $messages = Message::get()->reverse()->take(3);
+
+        return view('main', compact('messages'));
     }
 
     /**
@@ -34,13 +38,13 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
-        request()->validate([
+        $fields = request()->validate([
             'name' => 'required',
             'email' => 'required|email',
             'title' => 'required',
             'message' => 'required|min:6'
         ]);
-
+        Message::create( $fields );
         return view('form', ['form_valid' => 'validated']);
     }
 
